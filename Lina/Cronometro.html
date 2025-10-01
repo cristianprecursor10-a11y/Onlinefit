@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento con Logo</title>
+    <style>
+        body {
+            background-color: black; /* Fondo negro */
+            color: white; /* Texto blanco */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Añadir fondo desde una URL */
+            background-image: url('Fondo.jpeg');
+            background-size: cover; /* Ajustar el tamaño del fondo */
+            background-repeat: no-repeat; /* No repetir el fondo */
+        }
+        .container {
+            text-align: center;
+            margin-top: 47.5px; /* Reducido 5% */
+            margin-bottom: 190px; /* Reducido 5% */
+        }
+        .btn {
+            background-color: transparent; /* Hacer el botón transparente */
+            color: white; /* Letras blancas */
+            padding: 9.5px; /* Reducido 5% */
+            border: 2px solid #00FEFB; /* Restablecido */
+            border-radius: 190px; /* Reducido 5% */
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4.75px; /* Reducido 5% */
+            width: 57px; /* Reducido 5% */
+            height: 57px; /* Reducido 5% */
+        }
+        .btn:hover {
+            background-color: #00FEFB; /* Cambiar el color de fondo al pasar el cursor */
+            color: black; /* Cambiar el color de las letras al pasar el cursor */
+        }
+        .btn-icon {
+            font-size: 1.9em; /* Reducido 5% */
+            margin-top: -5px; /* Ajuste del símbolo hacia arriba */
+        }
+        /* Estilo para reducir el margen inferior */
+        .btn-menos-margen {
+            margin-bottom: -332.5px; /* Reducido 5% */
+        }
+        #cronometro {
+            font-size: 4.75em; /* Reducido 5% */
+            margin-top: 76px; /* Reducido 5% */
+            margin-bottom: 209px; /* Reducido 5% */
+        }
+        .microsegundos {
+            font-size: 0.475em; /* Reducido 5% */
+            vertical-align: top;
+        }
+        /* Estilo para el botón "Atrás" */
+        .btn-atras {
+            position: absolute; /* Posición absoluta para mantener el botón en su lugar */
+            top: 19px; /* Reducido 5% */
+            left: 19px; /* Reducido 5% */
+        }
+        .btn-atras .btn {
+            display: flex; /* Utilizar flexbox */
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center; /* Centrar verticalmente */
+            width: 60px; /* Modificado */
+            height: 40.5px; /* Modificado */
+            padding: 5px; /* Modificado */
+            font-size: 1em; /* Modificado */
+            border-radius: 20px; /* Modificado */
+            border: 2px solid #00FEFB; /* Modificado */
+        }
+        .container img {
+            margin-top: -4.75px; /* Reducido 5% */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="Logo.png" alt="Logo" width="190"> <!-- Reducido 5% -->
+        
+        <!-- Cronómetro -->
+        <div id="cronometro">00:00:00<span class="microsegundos">00</span></div>
+        <!-- Aplicando la clase "btn-icon" a los botones específicos -->
+        <button id="btn-iniciar-pausar" class="btn btn-icon btn-menos-margen">▶</button>
+        <button id="btn-restablecer" class="btn btn-icon btn-menos-margen">↺</button>
+        
+        <!-- Botón "Atrás" -->
+        <div class="btn-atras">
+            <button class="btn" onclick="goBack()">Atrás</button>
+        </div>
+    </div>
+
+    <script>
+        let horas = 0, minutos = 0, segundos = 0, microsegundos = 0;
+        let cronometro;
+        let corriendo = false;
+
+        function actualizarCronometro() {
+            microsegundos++;
+            if (microsegundos === 100) {
+                microsegundos = 0;
+                segundos++;
+                if (segundos === 60) {
+                    segundos = 0;
+                    minutos++;
+                    if (minutos === 60) {
+                        minutos = 0;
+                        horas++;
+                    }
+                }
+            }
+            document.getElementById('cronometro').innerHTML = 
+                (horas < 10 ? '0' + horas : horas) + ':' + 
+                (minutos < 10 ? '0' + minutos : minutos) + ':' + 
+                (segundos < 10 ? '0' + segundos : segundos) + 
+                '<span class="microsegundos">' + 
+                (microsegundos < 10 ? '0' + microsegundos : microsegundos) + 
+                '</span>';
+        }
+
+        document.getElementById('btn-iniciar-pausar').addEventListener('click', function() {
+            if (corriendo) {
+                clearInterval(cronometro);
+                this.textContent = '▶';
+            } else {
+                cronometro = setInterval(actualizarCronometro, 10);
+                this.textContent = 'II';
+            }
+            corriendo = !corriendo;
+        });
+
+        document.getElementById('btn-restablecer').addEventListener('click', function() {
+            clearInterval(cronometro);
+            horas = 0;
+            minutos = 0;
+            segundos = 0;
+            microsegundos = 0;
+            document.getElementById('cronometro').innerHTML = '00:00:00<span class="microsegundos">00</span>';
+            document.getElementById('btn-iniciar-pausar').textContent = '▶';
+            corriendo = false;
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
